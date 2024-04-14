@@ -16,6 +16,7 @@ with open(csvpath) as csvfile:
     greatest_loss = 0
     prev_row = 0
     total_change = 0
+    change = 0
 
     #read header row
     csv_header = next(csvreader)
@@ -29,29 +30,47 @@ with open(csvpath) as csvfile:
         #add profit/loss to total
         total = total + int(row[1])
 
-        change = int(row[1]) - prev_row
+        #start totaling and tracking change after first row
+        if prev_row != 0:
 
-        total_change += change
-        
-        print(f"{change}           {total_change}")
+            change = int(row[1]) - prev_row
 
+            total_change += change
+
+        #tracking greatest increase in profit
         if change > greatest_profit:
             greatest_profit = change
+            profit_month = row[0]
 
+        #tracking greatest decrease in profit
         elif change < greatest_loss:
             greatest_loss = change
+            loss_month = row[0]
 
+        #setting current row to prev_row for next row calculations
         prev_row = int(row[1])
 
-#avg_change = round(total_change / (total_months - 1), 2)
-#print(total_change)
+#calculated average change
+avg_change = round(total_change / (total_months - 1), 2)
 
-#print("Financial Analysis")
-#print("_____________________________")
-#print(f"Total Months: {total_months}")
-#print(f"Total: ${total}")
-#print(f"Average Change: ${avg_change}")
-#print(f"Greatest Increase in Profits: ${greatest_profit}")
-#print(f"Greatest Decrease in Profits: ${greatest_loss}")
+#print financial analysis summary to terminal
+print("Financial Analysis",)
+print("------------------------------")
+print(f"Total Months: {total_months}")
+print(f"Total: ${total}")
+print(f"Average Change: ${avg_change}")
+print(f"Greatest Increase in Profits: {profit_month} (${greatest_profit})")
+print(f"Greatest Decrease in Profits: {loss_month}  (${greatest_loss})")
+
+#print financial analysis summary to .txt file
+with open("output.txt", "a") as f:
+
+    print("Financial Analysis", file=f)
+    print("------------------------------", file=f)
+    print(f"Total Months: {total_months}", file=f)
+    print(f"Total: ${total}", file=f)
+    print(f"Average Change: ${avg_change}", file=f)
+    print(f"Greatest Increase in Profits: {profit_month} (${greatest_profit})", file=f)
+    print(f"Greatest Decrease in Profits: {loss_month}  (${greatest_loss})", file=f)
 
 
