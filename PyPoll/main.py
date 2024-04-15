@@ -66,6 +66,7 @@ print(f"Winner: {winner}")
 print("------------------------------")     
 
 #print results to .txt
+os.chdir('Analysis')
 with open("output.txt", "a") as f:
     print("Election Results", file=f) 
     print("------------------------------", file=f)

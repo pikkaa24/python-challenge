@@ -63,6 +63,7 @@ print(f"Greatest Increase in Profits: {profit_month} (${greatest_profit})")
 print(f"Greatest Decrease in Profits: {loss_month}  (${greatest_loss})")
 
 #print financial analysis summary to .txt file
+os.chdir('Analysis')
 with open("output.txt", "a") as f:
 
     print("Financial Analysis", file=f)
