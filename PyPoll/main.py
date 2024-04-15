@@ -1,6 +1,7 @@
 #Modules
 import os 
 import csv
+from collections import Counter
 
 #Set path for file
 csvpath = os.path.join('Resources', 'election_data.csv')
@@ -24,42 +25,57 @@ with open(csvpath) as csvfile:
         #add to total vote
         total_votes += 1
 
+        #add candidate name to list
         candidates.append(row[2])
 
-        #add vote to candidate
-        #if row[2] == "Charles Casper Stockham":
-            #stockham_votes += 1
-
-        #elif row[2] == "Diana DeGette":
-            #degette_votes += 1
-
-        #elif row[2] == "Raymon Anthony Doane":
-            #doane_votes += 1
-
     #clean duplicates from candidate list
-    candidates = list(set(candidates))
+    clean_candidates = []
+    candidate_count = Counter(candidates)
     vote_count = []
     
-    #fill in 0 in vote count list for each candidate in list
-    for x in candidates:
-        #print(candidates.index(x))
-        #index = candidates.index[x]
-        vote_count.append(0)
+    #count iterations of names and add number of votes and name to list 
+    for item, count in candidate_count.items():
+        vote_count.append(count)
+        clean_candidates.append(item)
 
-    for row in csvreader:
-        for x in candidates:
-            print(candidates(x))
-            #if row[2] == candidates(x):
-                #vote_count[x] += 1
-    
-    #print(vote_count)
+#print results to terminal
+print("Election Results") 
+print("------------------------------")
+print(f"Total Votes: {total_votes}")
+print("------------------------------")  
 
-    
-    #for row in csvreader:
-     #   for x in range(len(candidates)):
-      #      if row[2] == candidates[x]:
-       #         vote_count[x] += 1
-    #print(vote_count)
-        
+#set variable to hold most votes
+most_votes = 0
 
+#set variable to hold winner name
+winner = ""
 
+#print candidate name, percentage of votes, and number of votes from lists
+for x in clean_candidates:
+    index = clean_candidates.index(x)
+    votes = int(vote_count[index])
+    percent = round(((votes) / total_votes) * 100, 3)
+    print(f"{clean_candidates[index]}: {percent}% ({vote_count[index]})")
+
+    #find name with most votes and set as winner
+    if votes > most_votes:
+        most_votes = votes
+        winner = clean_candidates[index]
+print("------------------------------") 
+print(f"Winner: {winner}")
+print("------------------------------")     
+
+#print results to .txt
+with open("output.txt", "a") as f:
+    print("Election Results", file=f) 
+    print("------------------------------", file=f)
+    print(f"Total Votes: {total_votes}", file=f)
+    print("------------------------------", file=f)
+    for x in clean_candidates:
+        index = clean_candidates.index(x)
+        votes = int(vote_count[index])
+        percent = round(((votes) / total_votes) * 100, 3)
+        print(f"{clean_candidates[index]}: {percent}% ({vote_count[index]})", file=f)
+    print("------------------------------", file=f) 
+    print(f"Winner: {winner}", file=f)
+    print("------------------------------", file=f) 
